@@ -1,5 +1,6 @@
 package com.dart.submission.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -11,36 +12,38 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
-@TableGenerator(name="tab", initialValue=0, allocationSize=50)
+@TableGenerator(name = "tab", initialValue = 0, allocationSize = 50)
+
 public class Submission {
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="tab")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
 	private Long id;
-	
+
 	private Long numberOfSamples;
 	private String sampleType;
 	private String clientId;
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="submission")
-	private List<Plate> plates;
-	
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "submission")
+	private List<Plate> plates = new ArrayList<>();
+
 	public void addPlate(Plate plate) {
 		plates.add(plate);
 		plate.setSubmission(this);
 	}
-	
+
 	public void removePlate(Plate plate) {
 		plates.remove(plate);
 		plate.setSubmission(null);
 	}
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	/*
+	 * public Long getId() { return id; }
+	 * 
+	 * public void setId(Long id) { this.id = id; }
+	 */
 
 	public Long getNumberOfSamples() {
 		return numberOfSamples;
@@ -73,7 +76,5 @@ public class Submission {
 	public void setPlates(List<Plate> plates) {
 		this.plates = plates;
 	}
-	
-	
 
 }

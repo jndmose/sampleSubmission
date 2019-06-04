@@ -9,30 +9,33 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
-@TableGenerator(name="tab", initialValue=0, allocationSize=50)
+@TableGenerator(name = "tab", initialValue = 0, allocationSize = 50)
+
 public class Sample {
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="tab")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
 	private Long id;
 	private String row;
 	private String clientSampleId;
 	private String comments;
 	private String organismName;
+	@JsonProperty("column")
 	private Long columnNumber;
 	private String tissueType;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="plate_id")
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "plate_id")
 	private Plate plate;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	/*
+	 * public Long getId() { return id; }
+	 * 
+	 * public void setId(Long id) { this.id = id; }
+	 */
 
 	public String getRow() {
 		return row;
@@ -156,8 +159,5 @@ public class Sample {
 			return false;
 		return true;
 	}
-	
-	
-	
 
 }

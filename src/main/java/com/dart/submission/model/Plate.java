@@ -1,5 +1,6 @@
 package com.dart.submission.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -13,29 +14,32 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.TableGenerator;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
-@TableGenerator(name="tab", initialValue=0, allocationSize=50)
+@TableGenerator(name = "tab", initialValue = 0, allocationSize = 50)
+
 public class Plate {
 	@Id
-	@GeneratedValue(strategy=GenerationType.TABLE, generator="tab")
+	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
 	private Long id;
 	private String clientPlateId;
 	private String clientPlateBarcode;
 	private String sampleSubmissionFormat;
-	@OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY, mappedBy="plate")
-	private List<Sample> samples;
-	
-	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="submission_id")
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "plate")
+	private List<Sample> samples = new ArrayList<>();
+	@JsonBackReference
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "submission_id")
 	private Submission submission;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
+	/*
+	 * public Long getId() { return id; }
+	 * 
+	 * public void setId(Long id) { this.id = id; }
+	 */
 
 	public String getClientPlateId() {
 		return clientPlateId;
@@ -76,12 +80,12 @@ public class Plate {
 	public void setSubmission(Submission submission) {
 		this.submission = submission;
 	}
-	
+
 	public void addSample(Sample sample) {
 		samples.add(sample);
 		sample.setPlate(this);
 	}
-	
+
 	public void removeSample(Sample sample) {
 		samples.remove(sample);
 		sample.setPlate(null);
@@ -141,7 +145,5 @@ public class Plate {
 			return false;
 		return true;
 	}
-	
-	
 
 }

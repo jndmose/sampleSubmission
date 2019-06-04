@@ -1,3 +1,4 @@
+#Edit this file to suite your environment
 server.port = 8080
 server.servlet.context-path=/brapi/v1
 

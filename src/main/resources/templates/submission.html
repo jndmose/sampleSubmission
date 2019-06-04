@@ -1,0 +1,43 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Handling Form Submission</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+</head>
+<body>
+	<h1>Button</h1>
+   <button class="btn">Click me</button>
+   
+ <script th:inline="javascript">
+ /*<![CDATA[*/
+ var serverContext = [[@{/}]];
+$(document).ready(function(){
+	
+	const Url= serverContext + "submission/1";
+	
+	console.log(Url);
+	
+	$('.btn').click(function(){
+		
+		$.ajax({
+		
+			url: Url,
+			type: "GET",
+			success: function(result){
+				console.log(result)
+				//window.location.href = serverContext + "result";
+			},
+			error: function(error){
+				
+				console.log(`Error ${error}`)
+			}
+		})	
+		
+	})	
+	
+})
+</script> 
+     
+</body>
+</html>
