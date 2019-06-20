@@ -1,0 +1,17 @@
+.spanClass {
+	margin-right:1.25em;
+	display:inline-block;
+	color:#4b4ab5
+ }
+ 
+ .statusNone {
+	
+	color:#3d92c2
+ }
+ 
+ 
+ .statusRegistered{
+ 
+ color:#796b94;
+  text-transform: uppercase;
+ }

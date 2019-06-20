@@ -10,13 +10,16 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 @TableGenerator(name = "tab", initialValue = 0, allocationSize = 50)
-
+//@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
+@JsonIgnoreProperties(value = { "id", "submissionReference" })
 public class Submission {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
@@ -29,6 +32,17 @@ public class Submission {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "submission")
 	private List<Plate> plates = new ArrayList<>();
 
+	@OneToOne(mappedBy = "submission")
+	private SubmissionReference submissionReference;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
 	public void addPlate(Plate plate) {
 		plates.add(plate);
 		plate.setSubmission(this);
@@ -38,12 +52,6 @@ public class Submission {
 		plates.remove(plate);
 		plate.setSubmission(null);
 	}
-
-	/*
-	 * public Long getId() { return id; }
-	 * 
-	 * public void setId(Long id) { this.id = id; }
-	 */
 
 	public Long getNumberOfSamples() {
 		return numberOfSamples;
@@ -75,6 +83,14 @@ public class Submission {
 
 	public void setPlates(List<Plate> plates) {
 		this.plates = plates;
+	}
+
+	public SubmissionReference getSubmissionReference() {
+		return submissionReference;
+	}
+
+	public void setSubmissionReference(SubmissionReference submissionReference) {
+		this.submissionReference = submissionReference;
 	}
 
 }

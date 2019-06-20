@@ -1,6 +1,7 @@
 package com.dart.submission.controller;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import javax.validation.Valid;
 
@@ -11,11 +12,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.ModelAndView;
 
 import com.dart.submission.exception.ResourceNotFoundException;
 import com.dart.submission.model.Submission;
+import com.dart.submission.model.SubmissionReference;
+import com.dart.submission.model.json.OrderResponse;
 import com.dart.submission.model.json.SubmissionResponse;
+import com.dart.submission.repository.SubmissionRefRepository;
 import com.dart.submission.repository.SubmissionRepository;
 import com.dart.submission.service.ISubmissionService;
 import com.google.gson.Gson;
@@ -25,13 +28,21 @@ public class SubmissionController {
 
 	@Autowired
 	private SubmissionRepository submissionRepository;
+	@Autowired
+	private SubmissionRefRepository subRefRepo;
 
 	@Autowired
 	private ISubmissionService submissionService;
 	SubmissionResponse submissionResponse = new SubmissionResponse();
+	OrderResponse orderResponse = new OrderResponse();
+
+	// Submits to DArT using the web browser and saves the submission in submission
+	// reference table
 
 	@GetMapping(value = "/submission/{submissionId}", produces = { "application/json" })
 	public SubmissionResponse getSubmission(@PathVariable(value = "submissionId") Long submissionId) {
+
+		SubmissionReference subRef = new SubmissionReference();
 
 		Gson g = new Gson();
 
@@ -39,11 +50,13 @@ public class SubmissionController {
 			try {
 				String responseString = submissionService.submitToDart(sub);
 				submissionResponse = g.fromJson(responseString, SubmissionResponse.class);
-			} catch (ClientProtocolException e) {
-				// TODO Auto-generated catch block
+				subRef.setSubIdDart(submissionResponse.getResult().getSubmissionId());
+				subRef.setSubmission(sub);
+				subRef.setSubmissionDate(Calendar.getInstance().getTime());
+				subRefRepo.save(subRef);
+			} catch (ClientProtocolException e) { // TODO Auto-generated catch block
 				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
+			} catch (IOException e) { // TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			return submissionResponse;
@@ -52,8 +65,10 @@ public class SubmissionController {
 
 	}
 
+	// Locally submits plates from postman into the database.
+
 	@PostMapping("/vendor/orders")
-	public Submission submitPlates(@RequestBody @Valid Submission submission) {
+	public Long submitPlates(@RequestBody @Valid Submission submission) {
 
 		Submission sub = submissionRepository.save(submission);
 		sub.getPlates().forEach(plate -> {
@@ -63,14 +78,8 @@ public class SubmissionController {
 			sample.setPlate(plate));
 
 		});
-		return submissionRepository.save(sub);
+		return submissionRepository.save(sub).getId();
 
-	}
-
-	@GetMapping(value = "/result")
-	public ModelAndView showResult(ModelAndView modelAndView) {
-		modelAndView.setViewName("result");
-		return modelAndView;
 	}
 
 }

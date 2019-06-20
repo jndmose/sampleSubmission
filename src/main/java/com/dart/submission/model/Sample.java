@@ -10,11 +10,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.TableGenerator;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @TableGenerator(name = "tab", initialValue = 0, allocationSize = 50)
-
+@JsonIgnoreProperties(value = { "id" })
 public class Sample {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
@@ -31,11 +32,13 @@ public class Sample {
 	@JoinColumn(name = "plate_id")
 	private Plate plate;
 
-	/*
-	 * public Long getId() { return id; }
-	 * 
-	 * public void setId(Long id) { this.id = id; }
-	 */
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getRow() {
 		return row;

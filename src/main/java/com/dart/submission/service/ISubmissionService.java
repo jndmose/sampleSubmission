@@ -10,4 +10,8 @@ public interface ISubmissionService {
 
 	public String submitToDart(Submission sub) throws ClientProtocolException, IOException;
 
+	public String getOrderIdFromSubmissionId(String id) throws ClientProtocolException, IOException;
+
+	public String getOrderstatus(String orderId) throws ClientProtocolException, IOException;
+
 }
