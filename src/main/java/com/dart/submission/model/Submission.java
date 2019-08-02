@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.TableGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -19,7 +18,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 @Entity
 @TableGenerator(name = "tab", initialValue = 0, allocationSize = 50)
 //@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "@id")
-@JsonIgnoreProperties(value = { "id", "submissionReference" })
+@JsonIgnoreProperties(value = { "id", "submissionRefs" })
 public class Submission {
 	@Id
 	@GeneratedValue(strategy = GenerationType.TABLE, generator = "tab")
@@ -32,8 +31,8 @@ public class Submission {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "submission")
 	private List<Plate> plates = new ArrayList<>();
 
-	@OneToOne(mappedBy = "submission")
-	private SubmissionReference submissionReference;
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "submission")
+	private List<SubmissionReference> submissionRefs = new ArrayList<>();
 
 	public Long getId() {
 		return id;
@@ -85,12 +84,12 @@ public class Submission {
 		this.plates = plates;
 	}
 
-	public SubmissionReference getSubmissionReference() {
-		return submissionReference;
+	public List<SubmissionReference> getSubmissionRefs() {
+		return submissionRefs;
 	}
 
-	public void setSubmissionReference(SubmissionReference submissionReference) {
-		this.submissionReference = submissionReference;
+	public void setSubmissionRefs(List<SubmissionReference> submissionRefs) {
+		this.submissionRefs = submissionRefs;
 	}
 
 }

@@ -2,6 +2,7 @@ package com.dart.submission.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.dart.submission.exception.ResourceNotFoundException;
 import com.dart.submission.model.Plate;
@@ -19,6 +22,7 @@ import com.dart.submission.model.Submission;
 import com.dart.submission.model.SubmissionReference;
 import com.dart.submission.model.json.OrderResponse;
 import com.dart.submission.model.json.StatusResponse;
+import com.dart.submission.model.json.SubmissionResponse;
 import com.dart.submission.repository.SubmissionRefRepository;
 import com.dart.submission.repository.SubmissionRepository;
 import com.dart.submission.service.ISubmissionService;
@@ -36,6 +40,7 @@ public class MainController {
 
 	OrderResponse orderResponse = new OrderResponse();
 	StatusResponse statusResponse = new StatusResponse();
+	SubmissionResponse submissionResponse = new SubmissionResponse();
 
 	// Loads data from the submission reference table and also fetches orderId and
 	// Status from DArT API
@@ -62,16 +67,13 @@ public class MainController {
 				}
 				statusResponse = g.fromJson(responseString, StatusResponse.class);
 				sub.setStatus(statusResponse.getResult().getStatus());
-
 			}
 
 			else {
 
 				sub.setOrderId("NONE");
 				sub.setStatus("NONE,");
-
 			}
-
 		});
 
 		model.addAttribute("submissionRef", subRef);
@@ -84,6 +86,30 @@ public class MainController {
 		List<Submission> subs = submissionRepository.findAll();
 		model.addAttribute("submissions", subs);
 		return "result";
+	}
+
+	@GetMapping(value = "/plateInformation")
+	public ModelAndView showPlatesInfo(ModelAndView modelAndView) {
+		modelAndView.setViewName("plateInformation");
+		return modelAndView;
+	}
+
+	@GetMapping(value = "/platesData")
+	public ModelAndView showPlatesData(ModelAndView modelAndView) {
+		modelAndView.setViewName("platesData");
+		return modelAndView;
+	}
+
+	@GetMapping(value = "/submissionResponse")
+	public String showResponse(Model model, @ModelAttribute("responseString") HashMap<Integer, String> responseString,
+			@ModelAttribute("submissionResponse") SubmissionResponse subResponse) {
+		if (responseString.keySet().iterator().next() == 200) {
+			model.addAttribute("subResponse", subResponse);
+		} else {
+			model.addAttribute("responseString", responseString.get(responseString.keySet().iterator().next()));
+		}
+
+		return "submissionResponse";
 	}
 
 	// Loads the data from the unique submission Id upon clicking
@@ -126,5 +152,34 @@ public class MainController {
 		return orderId;
 
 	}
+
+	// Submits to DArT using the web browser and saves the submission in submission
+	// reference table
+
+	/*
+	 * @GetMapping(value = "/submission/{submissionId}") public String
+	 * getSubmission(@PathVariable(value = "submissionId") Long submissionId, Model
+	 * model) {
+	 * 
+	 * SubmissionReference subRef = new SubmissionReference();
+	 * 
+	 * Gson g = new Gson();
+	 * 
+	 * return submissionRepository.findById(submissionId).map(sub -> { try { String
+	 * responseString = submissionService.submitToDart(sub); submissionResponse =
+	 * g.fromJson(responseString, SubmissionResponse.class);
+	 * subRef.setSubIdDart(submissionResponse.getResult().getSubmissionId());
+	 * subRef.setSubmission(sub);
+	 * subRef.setSubmissionDate(Calendar.getInstance().getTime());
+	 * subRefRepo.save(subRef); model.addAttribute("submissinReference", subRef); }
+	 * catch (ClientProtocolException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated catch
+	 * block e.printStackTrace(); } return "submissionResponse";
+	 * 
+	 * }).orElseThrow(() -> new ResourceNotFoundException("submission with ID " +
+	 * submissionId + " not found"));
+	 * 
+	 * }
+	 */
 
 }

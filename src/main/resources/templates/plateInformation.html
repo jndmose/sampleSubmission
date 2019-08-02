@@ -18,6 +18,7 @@
     <!-- iCheck -->
     <link th:href="@{/vendors/iCheck/skins/flat/green.css}" rel="stylesheet">
     <!-- Datatables -->
+    <link href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css" rel="stylesheet">
     <link th:href="@{/vendors/datatables.net-bs/css/dataTables.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/vendors/datatables.net-buttons-bs/css/buttons.bootstrap.min.css}" rel="stylesheet">
     <link th:href="@{/vendors/datatables.net-fixedheader-bs/css/fixedHeader.bootstrap.min.css}" rel="stylesheet">
@@ -26,6 +27,7 @@
 
     <!-- Custom Theme Style -->
     <link th:href="@{/build/css/custom.min.css}" rel="stylesheet">
+    <link th:href="@{/build/css/submission.css}" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -42,8 +44,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                 <img th:src="@{/images/brapi_logo_2.png}"/>
-                
+                <img th:src="@{/images/brapi_logo_2.png}"/>
               </div>
              
             </div>
@@ -54,20 +55,20 @@
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>General</h3>
+               
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Orders <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                     <li><a th:href="@{/}">New Order</a></li>
-                      <li><a th:href="@{/availableOrders}">Available Orders</a></li>
+                    <li><a th:href="@{/availableOrders}">Available Orders</a></li>
                      
-                     <li><a th:href="@{/submissionReference}">Order Status</a></li>
+                      <li><a th:href="@{/submissionReference}">Order Status</a></li>
                       
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Plates <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                     <li><a th:href="@{/plateInformation}">Plates Information</a></li>
+                      <li><a th:href="@{/plateInformation}">Plates Information</a></li>
                      <li><a th:href="@{/platesData}">Plates Data</a></li>
                       <li><a href="form_validation.html">Form Validation</a></li>
                       <li><a href="form_wizards.html">Form Wizard</a></li>
@@ -155,8 +156,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Samples To be Submitted To DArT</h3>
-                <h2 id="subId" th:text="${submission.id}" style="display:none"></h2>
+                <h3>Enter orderId and submit (Table search able by Plate ID)</h3>
               </div>
 
               <div class="title_right">
@@ -196,41 +196,51 @@
                     <div class="clearfix"></div>
                   </div>
                   <div class="x_content">
-                    <table id="datatable" class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Row</th>
-                          <th>Sample ID</th>
-                          <th>Comments</th>
-                          <th>Organism Name</th>
-                          <th>Column</th>
-                          <th>Tissue Type</th>
-                          <th> Plate Barcode</th>
-                        </tr>
-                      </thead>
+     <form action="/"  enctype="utf8" id="fileForm" role="form">
+            
 
+            <div class="form-group"> 	 
+                <label for="orderId"><span class="req">* </span> Order ID: </label>
+                    <input class="form-control" type="text" name="orderId" id = "orderId"  required="required" /> 
+                            
+            </div>
 
-                      <tbody>
-                        <tr th:each="sample : ${samples}">
-                         <td th:text="${sample.row}" />
-                          <td th:text="${sample.clientSampleId}" />
-                          <td th:text="${sample.comments}" />
-                           <td th:text="${sample.organismName}" />
-                          <td th:text="${sample.columnNumber}" />
-                          <td th:text="${sample. tissueType}" />
-                          <td th:text="${sample.plate.clientPlateBarcode}" />
-                        </tr>
-                       
-                      </tbody>
-                    </table>
+            <div class="form-group">
+                <input class="btn btn-success"  type="submit" id="load" name="submit_reg" value="Submit" >
+                 <span style="display:none" id="LoadingImage" > 
+                <img th:src="@{/images/cropped.gif}"/></span> 
+            </div>
+            
+             </form>
                     
-                    <h1>Submit To DArT</h1>
-                  <button class="btn btn-success submitBtn">submit</button>
+                    
+                    <table id="example" class="display" style="width:100%">
+        <thead>
+            <tr>
+                  <th></th>
+                  <th> Plate ID</th>
+                 <th> Sample ID</th>    
+                <th>Column</th>
+                <th>Row</th>
+                
+            </tr>
+        </thead>
+        <tfoot>
+            <tr>   <th></th>
+                  <th> Plate ID</th>
+                 <th> Sample ID</th>    
+                <th>Column</th>
+                <th>Row</th>
+                
+            </tr>
+        </tfoot>
+    </table>
+                    
+                    
+
                   </div>
                 </div>
               </div>
-
-
             </div>
           </div>
         </div>
@@ -248,6 +258,10 @@
     </div>
 
     <!-- jQuery -->
+    
+    
+    
+    
     <script th:src="@{/vendors/jquery/dist/jquery.min.js}"></script>
     <!-- Bootstrap -->
     <script th:src="@{/vendors/bootstrap/dist/js/bootstrap.min.js}"></script>
@@ -258,7 +272,7 @@
     <!-- iCheck -->
     <script th:src="@{/vendors/iCheck/icheck.min.js}"></script>
     <!-- Datatables -->
-    <script th:src="@{/vendors/datatables.net/js/jquery.dataTables.min.js}"></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script th:src="@{/vendors/datatables.net-bs/js/dataTables.bootstrap.min.js}"></script>
     <script th:src="@{/vendors/datatables.net-buttons/js/dataTables.buttons.min.js}"></script>
     <script th:src="@{/vendors/datatables.net-buttons-bs/js/buttons.bootstrap.min.js}"></script>
@@ -276,7 +290,106 @@
 
     <!-- Custom Theme Scripts -->
     <script th:src="@{/build/js/custom.min.js}"></script>
-     <script th:src="@{/build/js/submission.js}"></script>
+    
+    <script>
+   
+
+    $(document).ready(function () {
+    	$('form').submit(function(event) {
+    		register(event);
+    	});
+    	
+    });
+
+    function register(event){
+    	$("#LoadingImage").show();
+     	
+    	event.preventDefault();
+        var formData= $("#orderId").val();
+        
+        jQuery.getJSON('/plateInformation/'+formData, function(json) {
+        	
+        	var full_table_data = [];
+        	for(var j= 0;j <json.data.length; j++){
+        	var samples_data = json.data[j].samples;
+        	console.log(samples_data);
+        	 
+        
+        	 for (var i = 0; i < samples_data.length; i++) {
+        	      //each plate
+        	      console.log(json);
+        	      var plate_sample = samples_data[i];
+        	      var plate_id = json.data[j].clientPlateId;
+        	      
+        	      plate_sample['clientPlateId'] = plate_id;
+        	      
+
+        	      full_table_data = full_table_data.concat(plate_sample);
+        	    }
+        	 
+        	}
+        	$("#LoadingImage").hide();
+        	var table= $('#example').DataTable( {
+        		destroy: true,
+                "data": full_table_data,
+                "columns": [
+                	{
+                        "className":      'details-control',
+                        "orderable":      false,
+                        "data":           null,
+                        "defaultContent": ''
+                    },
+                    { "data": "clientPlateId", "searchable": true},
+                    { "data": "clientSampleId", "searchable": false },
+                    { "data": "column","searchable": false },
+                    { "data": "row","searchable": false },
+                   
+                ]
+            } );
+        	
+        	// Add event listener for opening and closing details
+            $('#example tbody').on('click', 'td.details-control', function () {
+                var tr = $(this).closest('tr');
+                var row = table.row( tr );
+         
+                if ( row.child.isShown() ) {
+                    // This row is already open - close it
+                    row.child.hide();
+                    tr.removeClass('shown');
+                }
+                else {
+                    // Open this row
+                    row.child( format(row.data()) ).show();
+                    tr.addClass('shown');
+                }
+            } );
+        	
+        });
+        
+        }
+    
+    function format ( d ) {
+        // `d` is the original data object for the row
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">'+
+        '<tr>'+
+        '<td>Organism Name:</td>'+
+        '<td>'+d.organismName+'</td>'+
+    '</tr>'+ 
+        
+    '<tr>'+
+    '<td>Tissue Type:</td>'+
+    '<td>'+d.tissueType+'</td>'+
+'</tr>'+
+
+'<tr>'+
+'<td>Comments:</td>'+
+'<td>'+d.comments+'</td>'+
+'</tr>'+
+    
+        '</table>';
+    }
+    
+  </script>
 
   </body>
 </html>

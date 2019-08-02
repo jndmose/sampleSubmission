@@ -15,3 +15,26 @@
  color:#796b94;
   text-transform: uppercase;
  }
+ 
+ .statusCompleted{
+ 
+ color:#5246b9;
+  text-transform: uppercase;
+ }
+ 
+ .orderId{
+   color: #5246b9
+ }
+ 
+ .orderId:hover{
+ 
+  color: #195fe6
+ }
+ 
+ td.details-control {
+    background: url('../../images/details_open.png') no-repeat center center;
+    cursor: pointer;
+}
+tr.shown td.details-control {
+    background: url('../../images/details_close.png') no-repeat center center;
+}

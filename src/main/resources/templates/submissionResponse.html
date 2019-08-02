@@ -26,6 +26,7 @@
 
     <!-- Custom Theme Style -->
     <link th:href="@{/build/css/custom.min.css}" rel="stylesheet">
+    <link th:href="@{/build/css/submission.css}" rel="stylesheet">
   </head>
 
   <body class="nav-md">
@@ -34,7 +35,7 @@
         <div class="col-md-3 left_col">
           <div class="left_col scroll-view">
             <div class="navbar nav_title" style="border: 0;">
-         <a href="index.html" class="site_title"> <span>BrAPI Vendor</span></a>
+             <a href="index.html" class="site_title"><span>BrAPI Vendor</span></a>
             </div>
 
             <div class="clearfix"></div>
@@ -42,8 +43,7 @@
             <!-- menu profile quick info -->
             <div class="profile clearfix">
               <div class="profile_pic">
-                 <img th:src="@{/images/brapi_logo_2.png}"/>
-                
+                <img th:src="@{/images/brapi_logo_2.png}"/>
               </div>
              
             </div>
@@ -54,21 +54,21 @@
             <!-- sidebar menu -->
             <div id="sidebar-menu" class="main_menu_side hidden-print main_menu">
               <div class="menu_section">
-                <h3>General</h3>
+              
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-home"></i> Orders <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                     <li><a th:href="@{/}">New Order</a></li>
-                      <li><a th:href="@{/availableOrders}">Available Orders</a></li>
-                     
+                    <li><a th:href="@{/availableOrders}">Available Orders</a></li>
+                    
                      <li><a th:href="@{/submissionReference}">Order Status</a></li>
-                      
+              
                     </ul>
                   </li>
                   <li><a><i class="fa fa-edit"></i> Plates <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                     <li><a th:href="@{/plateInformation}">Plates Information</a></li>
-                     <li><a th:href="@{/platesData}">Plates Data</a></li>
+                      <li><a th:href="@{/plateInformation}">Plates Information</a></li>
+                      <li><a th:href="@{/platesData}">Plates Data</a></li>
                       <li><a href="form_validation.html">Form Validation</a></li>
                       <li><a href="form_wizards.html">Form Wizard</a></li>
                       <li><a href="form_upload.html">Form Upload</a></li>
@@ -88,11 +88,12 @@
                       <li><a href="calendar.html">Calendar</a></li>
                     </ul>
                   </li>
-                 
+                  
+         
                 </ul>
               </div>
               <div class="menu_section">
-             
+               
               </div>
 
             </div>
@@ -155,8 +156,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Samples To be Submitted To DArT</h3>
-                <h2 id="subId" th:text="${submission.id}" style="display:none"></h2>
+                <h3>Submission Status</h3>
               </div>
 
               <div class="title_right">
@@ -195,37 +195,16 @@
                     </ul>
                     <div class="clearfix"></div>
                   </div>
-                  <div class="x_content">
-                    <table id="datatable" class="table table-striped table-bordered">
-                      <thead>
-                        <tr>
-                          <th>Row</th>
-                          <th>Sample ID</th>
-                          <th>Comments</th>
-                          <th>Organism Name</th>
-                          <th>Column</th>
-                          <th>Tissue Type</th>
-                          <th> Plate Barcode</th>
-                        </tr>
-                      </thead>
-
-
-                      <tbody>
-                        <tr th:each="sample : ${samples}">
-                         <td th:text="${sample.row}" />
-                          <td th:text="${sample.clientSampleId}" />
-                          <td th:text="${sample.comments}" />
-                           <td th:text="${sample.organismName}" />
-                          <td th:text="${sample.columnNumber}" />
-                          <td th:text="${sample. tissueType}" />
-                          <td th:text="${sample.plate.clientPlateBarcode}" />
-                        </tr>
-                       
-                      </tbody>
-                    </table>
-                    
-                    <h1>Submit To DArT</h1>
-                  <button class="btn btn-success submitBtn">submit</button>
+                  <div  class="x_content dataOutput">
+                   <div th:if="${subResponse}"> 
+                   
+                 <p>  Submission ID: &nbsp;<span th:text="${subResponse.result.submissionId}"> response </span>  </p>
+                </div>
+                
+                 <div th:if="${responseString}"> 
+                   
+                 <p th:text="${responseString}" >Error</p>
+                </div>
                   </div>
                 </div>
               </div>

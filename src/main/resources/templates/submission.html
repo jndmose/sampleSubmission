@@ -56,24 +56,25 @@
               <div class="menu_section">
               
                 <ul class="nav side-menu">
-                  <li><a><i class="fa fa-home"></i> Home <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-home"></i> Orders <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a th:href="@{/}">Submit Data</a></li>
-                     <li><a th:href="@{/submissionReference}">Submission Status</a></li>
-                      <li><a href="index3.html">Dashboard3</a></li>
+                    <li><a th:href="@{/}">New Order</a></li>
+                   <li><a th:href="@{/availableOrders}">Available Orders</a></li>
+                     <li><a th:href="@{/submissionReference}">Order Status</a></li>
+                      
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-edit"></i> Forms <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-edit"></i> Plates <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="form.html">General Form</a></li>
-                      <li><a href="form_advanced.html">Advanced Components</a></li>
+                      <li><a th:href="@{/plateInformation}">Plates Information</a></li>
+                      <li><a th:href="@{/platesData}">Plates Data</a></li>
                       <li><a href="form_validation.html">Form Validation</a></li>
                       <li><a href="form_wizards.html">Form Wizard</a></li>
                       <li><a href="form_upload.html">Form Upload</a></li>
                       <li><a href="form_buttons.html">Form Buttons</a></li>
                     </ul>
                   </li>
-                  <li><a><i class="fa fa-desktop"></i> UI Elements <span class="fa fa-chevron-down"></span></a>
+                  <li><a><i class="fa fa-desktop"></i> Data Analysis <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="general_elements.html">General Elements</a></li>
                       <li><a href="media_gallery.html">Media Gallery</a></li>
@@ -154,7 +155,7 @@
           <div class="">
             <div class="page-title">
               <div class="title_left">
-                <h3>Submission Status</h3>
+                <h3>Order Status</h3>
               </div>
 
               <div class="title_right">
@@ -233,7 +234,7 @@
         <!-- footer content -->
         <footer>
           <div class="pull-right">
-            Gentelella - Bootstrap Admin Template by <a href="https://colorlib.com">Colorlib</a>
+             BrAPI - Sample Submission Application
           </div>
           <div class="clearfix"></div>
         </footer>
