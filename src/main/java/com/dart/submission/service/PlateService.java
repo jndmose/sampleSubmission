@@ -11,6 +11,7 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +19,8 @@ public class PlateService implements IPlateService {
 	private static String BASE_URL = "https://ordering-testing.diversityarrays.com/brapi/v1";
 	// register an account with https://ordering-testing.diversityarrays.com to get
 	// a token
-	private static String TOKEN = "";
+	@Value("${api.authtoken}")
+	private String TOKEN;
 
 	@Override
 	public String getPlateDetails(String orderId) throws ClientProtocolException, IOException {

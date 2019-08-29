@@ -80,7 +80,7 @@ public class MainController {
 		return "submission";
 	}
 
-	// LOads data from the submission table
+	// Loads data from the submission table
 	@GetMapping(value = "/")
 	public String showResult(Model model) {
 		List<Submission> subs = submissionRepository.findAll();
