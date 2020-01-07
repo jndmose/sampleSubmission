@@ -49,7 +49,10 @@ public class MainController {
 	public String showSubmissionPage(Model model) {
 		Gson g = new Gson();
 		List<SubmissionReference> subRef = subRefRepo.findAll();
-		subRef.stream().forEach(sub -> {
+		long startTime = System.currentTimeMillis();
+
+		// Normally stream takes double the time, so uses parallel stream
+		subRef.parallelStream().forEach(sub -> {
 
 			List<String> orderId = getOrderNumberFromSubmission(sub.getSubIdDart());
 			if (!orderId.isEmpty()) {
@@ -75,6 +78,10 @@ public class MainController {
 				sub.setStatus("NONE,");
 			}
 		});
+
+		long stopTime = System.currentTimeMillis();
+		long elapsedTime = stopTime - startTime;
+		System.out.println("Time taken to retrieve a submission is " + elapsedTime);
 
 		model.addAttribute("submissionRef", subRef);
 		return "submission";
@@ -152,34 +159,5 @@ public class MainController {
 		return orderId;
 
 	}
-
-	// Submits to DArT using the web browser and saves the submission in submission
-	// reference table
-
-	/*
-	 * @GetMapping(value = "/submission/{submissionId}") public String
-	 * getSubmission(@PathVariable(value = "submissionId") Long submissionId, Model
-	 * model) {
-	 * 
-	 * SubmissionReference subRef = new SubmissionReference();
-	 * 
-	 * Gson g = new Gson();
-	 * 
-	 * return submissionRepository.findById(submissionId).map(sub -> { try { String
-	 * responseString = submissionService.submitToDart(sub); submissionResponse =
-	 * g.fromJson(responseString, SubmissionResponse.class);
-	 * subRef.setSubIdDart(submissionResponse.getResult().getSubmissionId());
-	 * subRef.setSubmission(sub);
-	 * subRef.setSubmissionDate(Calendar.getInstance().getTime());
-	 * subRefRepo.save(subRef); model.addAttribute("submissinReference", subRef); }
-	 * catch (ClientProtocolException e) { // TODO Auto-generated catch block
-	 * e.printStackTrace(); } catch (IOException e) { // TODO Auto-generated catch
-	 * block e.printStackTrace(); } return "submissionResponse";
-	 * 
-	 * }).orElseThrow(() -> new ResourceNotFoundException("submission with ID " +
-	 * submissionId + " not found"));
-	 * 
-	 * }
-	 */
 
 }

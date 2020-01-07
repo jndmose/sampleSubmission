@@ -15,14 +15,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.dart.submission.model.json.OrderDetails;
 import com.dart.submission.model.json.OrderResponse;
 import com.dart.submission.model.json.ReportResponse;
-import com.dart.submission.service.OrderService;
+import com.dart.submission.service.IOrderService;
 import com.google.gson.Gson;
 
 @Controller
 public class OrderController {
 
 	@Autowired
-	private OrderService orderService;
+	private IOrderService orderService;
 	OrderResponse orderResponse = new OrderResponse();
 	ReportResponse reportResponse = new ReportResponse();
 	List<OrderDetails> orderDetails = new ArrayList<OrderDetails>();

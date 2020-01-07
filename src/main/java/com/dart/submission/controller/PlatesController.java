@@ -4,18 +4,24 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.dart.submission.model.Submission;
 import com.dart.submission.model.json.PlateDetails;
 import com.dart.submission.model.json.PlateResponse;
 import com.dart.submission.model.json.PlateResult;
 import com.dart.submission.model.json.PlatesData;
 import com.dart.submission.model.json.PlatesDataResponse;
+import com.dart.submission.repository.SubmissionRepository;
 import com.dart.submission.service.PlateService;
 import com.google.gson.Gson;
 
@@ -23,6 +29,8 @@ import com.google.gson.Gson;
 public class PlatesController {
 	@Autowired
 	private PlateService plateService;
+	@Autowired
+	private SubmissionRepository submissionRepository;
 
 	PlateResponse plateResponse = new PlateResponse();
 	PlatesDataResponse platesDataResponse = new PlatesDataResponse();
@@ -73,6 +81,21 @@ public class PlatesController {
 			e.printStackTrace();
 		}
 		return platesData;
+
+	}
+
+	@PostMapping("/vendor/orders")
+	public Long submitPlates(@RequestBody @Valid Submission submission) {
+
+		Submission sub = submissionRepository.save(submission);
+		sub.getPlates().forEach(plate -> {
+			plate.setSubmission(sub);
+			plate.getSamples().forEach(sample ->
+
+			sample.setPlate(plate));
+
+		});
+		return submissionRepository.save(sub).getId();
 
 	}
 

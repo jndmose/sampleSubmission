@@ -5,6 +5,11 @@ import java.io.IOException;
 import org.apache.http.client.ClientProtocolException;
 
 public interface IOrderService {
+	/**
+	 * method returns order Ids of all submitted orders
+	 * 
+	 * @author moses
+	 */
 
 	public String getAvailableOrders() throws ClientProtocolException, IOException;
 

@@ -5,19 +5,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.Valid;
-
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.dart.submission.exception.ResourceNotFoundException;
-import com.dart.submission.model.Submission;
 import com.dart.submission.model.SubmissionReference;
 import com.dart.submission.model.json.OrderResponse;
 import com.dart.submission.model.json.SubmissionResponse;
@@ -76,23 +71,6 @@ public class SubmissionController {
 			return "redirect:/submissionResponse";
 
 		}).orElseThrow(() -> new ResourceNotFoundException("submission with ID " + submissionId + " not found"));
-
-	}
-
-	// Locally submits plates from postman into the database.
-
-	@PostMapping("/vendor/orders")
-	public Long submitPlates(@RequestBody @Valid Submission submission) {
-
-		Submission sub = submissionRepository.save(submission);
-		sub.getPlates().forEach(plate -> {
-			plate.setSubmission(sub);
-			plate.getSamples().forEach(sample ->
-
-			sample.setPlate(plate));
-
-		});
-		return submissionRepository.save(sub).getId();
 
 	}
 
