@@ -8,6 +8,8 @@ import javax.validation.Valid;
 
 import org.apache.http.client.ClientProtocolException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +26,7 @@ import com.dart.submission.model.json.PlatesDataResponse;
 import com.dart.submission.repository.SubmissionRepository;
 import com.dart.submission.service.PlateService;
 import com.google.gson.Gson;
+import com.google.gson.JsonSyntaxException;
 
 @RestController
 public class PlatesController {
@@ -39,7 +42,7 @@ public class PlatesController {
 	List<PlatesData> platesData = new ArrayList<PlatesData>();
 
 	@GetMapping(value = "/plateInformation/{orderId}", produces = "application/json")
-	public PlateResult plateDetailsInfo(@PathVariable(value = "orderId") String orderId, Model model) {
+	public ResponseEntity<PlateResult> plateDetailsInfo(@PathVariable(value = "orderId") String orderId, Model model) {
 
 		String responseString;
 		Gson g = new Gson();
@@ -53,18 +56,27 @@ public class PlatesController {
 			});
 			plateResult.setData(plateDetails);
 		} catch (ClientProtocolException e) {
-			// TODO Auto-generated catch block
+
 			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return plateResult;
+
+		catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+		}
+		// return plateResult;
+		return new ResponseEntity<>(plateResult, HttpStatus.OK);
 
 	}
 
 	@GetMapping(value = "/platesData/{submissionId}", produces = "application/json")
-	public List<PlatesData> platesDetails(@PathVariable(value = "submissionId") String submissionId, Model model) {
+	public ResponseEntity<List<PlatesData>> platesDetails(@PathVariable(value = "submissionId") String submissionId,
+			Model model) {
 
 		String responseString;
 		Gson g = new Gson();
@@ -76,11 +88,18 @@ public class PlatesController {
 		} catch (ClientProtocolException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		return platesData;
+
+		catch (JsonSyntaxException ex) {
+			ex.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		return new ResponseEntity<>(platesData, HttpStatus.OK);
 
 	}
 
